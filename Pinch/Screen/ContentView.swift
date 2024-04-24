@@ -71,6 +71,29 @@ struct ContentView: View {
                             })
                     )
                 
+                //MARK: - MAGNIGFICATION
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged({ value in
+                                withAnimation(.linear(duration: 1)){
+                                    if (imageScale >= 1 && imageScale <= 5 ){
+                                        imageScale = value
+                                    } else if (imageScale > 5){
+                                        imageScale = 5
+                                    }
+                                }
+                            })
+                            .onEnded { _ in
+                                if (imageScale > 5){
+                                    imageScale = 5
+                                } else if (imageScale <= 1){
+                                    resetValues()
+                                }
+                            }
+                        
+                        
+                    )
+                
             }//: Zstack
             
             .navigationTitle("Pinch % Zoom")
@@ -95,7 +118,6 @@ struct ContentView: View {
                 Group{
                     HStack{
                         // SCALE DOWN
-                        
                         Button {
                             //some action
                             withAnimation(.spring()){
@@ -114,7 +136,7 @@ struct ContentView: View {
                         // RESET
                         Button {
                             // some action
-                         resetValues()
+                            resetValues()
                         } label: {
                             ControlImageView(icon: "arrow.up.left.and.down.right.magnifyingglass")
                         }
@@ -138,13 +160,25 @@ struct ContentView: View {
                     .background(.ultraThinMaterial)
                     .cornerRadius(12)
                     .opacity(isAnimating ? 1 : 0)
-                    
                 }
                     .padding(.bottom, 30)
                     .padding(.horizontal)
                 , alignment: .bottom
             )
             
+            //MARK: - DRAWER
+            .overlay(
+                HStack(spacing: 12){
+                    //MARK: - Drawer Handle
+                    Image(systemName: "chevron.compact.left")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 40)
+                        .padding()
+                    //MARK: - Tumbnails
+                    
+                }//: DRAWER
+            )
             
         }// : NavigationView
         .navigationViewStyle(.stack)
