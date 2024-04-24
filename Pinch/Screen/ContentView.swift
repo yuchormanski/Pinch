@@ -71,12 +71,6 @@ struct ContentView: View {
                             })
                     )
                 
-                
-                
-                
-                
-                
-                
             }//: Zstack
             
             .navigationTitle("Pinch % Zoom")
@@ -88,11 +82,67 @@ struct ContentView: View {
             )
             
             //MARK: - INFO PANEL
-            .overlay(
+            // отива в края на страницата, защото има добавен невидим слой, който я заема цялата и става като карта - Color.clear
+            .overlay( // слагаме овърлей за да са винаги видими
                 InfoPanelView(scale: imageScale, offcet: imageOffcet)
                     .padding(.horizontal)
                     .padding(.top, 30)
                 , alignment: .top
+            )
+            
+            //MARK: - CONTROLS
+            .overlay(
+                Group{
+                    HStack{
+                        // SCALE DOWN
+                        
+                        Button {
+                            //some action
+                            withAnimation(.spring()){
+                                if imageScale > 1 {
+                                    imageScale -= 1
+                                    if imageScale <= 1 {
+                                        resetValues()
+                                    }
+                                }
+                            }
+                            
+                        } label: {
+                            ControlImageView(icon: "minus.magnifyingglass")
+                        }
+                        
+                        // RESET
+                        Button {
+                            // some action
+                         resetValues()
+                        } label: {
+                            ControlImageView(icon: "arrow.up.left.and.down.right.magnifyingglass")
+                        }
+                        
+                        //SCALE UP
+                        Button {
+                            // some action
+                            withAnimation(.spring()){
+                                if imageScale < 5 {
+                                    imageScale += 1
+                                    if imageScale > 5 {
+                                        imageScale = 5
+                                    }
+                                }
+                            }
+                        } label: {
+                            ControlImageView(icon: "plus.magnifyingglass")
+                        }
+                    }// : CONTROLS
+                    .padding(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
+                    .background(.ultraThinMaterial)
+                    .cornerRadius(12)
+                    .opacity(isAnimating ? 1 : 0)
+                    
+                }
+                    .padding(.bottom, 30)
+                    .padding(.horizontal)
+                , alignment: .bottom
             )
             
             
